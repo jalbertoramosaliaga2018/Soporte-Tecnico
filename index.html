@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>José Alberto — Soporte Técnico Informático | Montevideo</title>
+<meta name="description" content="Soporte técnico informático a domicilio y remoto en Montevideo. Mantenimiento preventivo, instalación de sistemas operativos y drivers. Coordiná por WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --wa-green:#25D366;
+    --wa-green-dark:#128C7E;
+    --wa-teal:#075E54;
+    --ink:#0B141A;
+    --paper:#F5FBF6;
+    --panel:#FFFFFF;
+    --amber:#FFB020;
+    --coral:#FF6B5B;
+    --sky:#3AB0FF;
+    --muted:#5C6B66;
+    --line: rgba(11,20,26,0.09);
+    --r-lg: 26px;
+    --r-md: 18px;
+    --r-sm: 12px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', -apple-system, sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;}
+  h1,h2,h3,h4{font-family:'Sora', 'Inter', sans-serif;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 28px;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--wa-teal); outline-offset:3px;}
+
+  /* decorative blobs */
+  .blob{position:absolute; border-radius:50%; filter:blur(60px); opacity:0.35; z-index:0; pointer-events:none;}
+
+  /* ===== Header ===== */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(245,251,246,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .header-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px;
+    max-width:1120px; margin:0 auto;
+  }
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    font-weight:700; font-size:1.05rem; letter-spacing:-0.01em;
+    text-decoration:none; color:var(--ink);
+  }
+  .brand-mark{
+    width:34px; height:34px; border-radius:10px;
+    background:linear-gradient(135deg, var(--wa-green), var(--wa-teal));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:800; font-size:0.95rem; font-family:'Sora',sans-serif;
+    flex-shrink:0;
+  }
+  nav{display:flex; align-items:center; gap:26px;}
+  nav a{
+    text-decoration:none; color:var(--ink); font-size:0.92rem; font-weight:500;
+    opacity:0.72;
+  }
+  nav a:hover{opacity:1;}
+  .nav-cta{
+    display:flex; align-items:center; gap:8px;
+    background:var(--wa-green); color:#fff !important;
+    padding:10px 18px; border-radius:100px;
+    opacity:1 !important; font-weight:600;
+    box-shadow:0 6px 16px rgba(37,211,102,0.35);
+  }
+  .nav-cta:hover{background:var(--wa-green-dark);}
+  @media (max-width:760px){ nav a:not(.nav-cta){display:none;} }
+
+  /* ===== Hero ===== */
+  .hero{
+    position:relative;
+    padding:72px 0 60px;
+    overflow:hidden;
+  }
+  .blob-1{width:420px; height:420px; background:var(--wa-green); top:-160px; right:-120px;}
+  .blob-2{width:300px; height:300px; background:var(--sky); bottom:-140px; left:-100px; opacity:0.22;}
+
+  .hero-grid{
+    position:relative; z-index:1;
+    display:grid; grid-template-columns:1.15fr 0.85fr; gap:52px; align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr;} }
+
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--panel); border:1px solid var(--line);
+    padding:7px 14px; border-radius:100px;
+    font-size:0.82rem; font-weight:600; color:var(--wa-teal);
+    margin-bottom:22px;
+  }
+  .eyebrow .pulse{
+    width:8px; height:8px; border-radius:50%; background:var(--wa-green);
+    box-shadow:0 0 0 0 rgba(37,211,102,0.6);
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(37,211,102,0.5);}
+    70%{box-shadow:0 0 0 8px rgba(37,211,102,0);}
+    100%{box-shadow:0 0 0 0 rgba(37,211,102,0);}
+  }
+
+  h1{
+    font-size:clamp(2.3rem, 4.6vw, 3.3rem);
+    line-height:1.08;
+    font-weight:800;
+    letter-spacing:-0.02em;
+    margin:0 0 20px;
+    max-width:13ch;
+  }
+  .hero-sub{
+    font-size:1.08rem;
+    max-width:48ch;
+    color:var(--muted);
+    margin:0 0 32px;
+  }
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:36px;}
+  .btn{
+    display:inline-flex; align-items:center; gap:9px;
+    padding:15px 24px;
+    border-radius:100px;
+    text-decoration:none;
+    font-weight:600; font-size:0.96rem;
+    border:1.5px solid transparent;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--wa-green); color:#fff; box-shadow:0 10px 24px rgba(37,211,102,0.35);}
+  .btn-primary:hover{background:var(--wa-green-dark); box-shadow:0 12px 28px rgba(18,140,126,0.4);}
+  .btn-secondary{background:var(--panel); color:var(--ink); border-color:var(--line);}
+  .btn-secondary:hover{border-color:var(--ink);}
+  .btn svg{width:19px; height:19px;}
+
+  .trust-row{display:flex; gap:26px; flex-wrap:wrap;}
+  .trust-row div{display:flex; align-items:center; gap:9px; font-size:0.86rem; color:var(--muted); font-weight:500;}
+  .trust-row .ico{
+    width:30px; height:30px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.9rem;
+  }
+  .ico-green{background:rgba(37,211,102,0.15); color:var(--wa-green-dark);}
+  .ico-amber{background:rgba(255,176,32,0.18); color:#B8790A;}
+  .ico-sky{background:rgba(58,176,255,0.16); color:#1B7FC4;}
+
+  /* chat mockup */
+  .chat-card{
+    position:relative; z-index:1;
+    background:var(--panel);
+    border-radius:var(--r-lg);
+    border:1px solid var(--line);
+    box-shadow:0 24px 60px rgba(11,20,26,0.12);
+    overflow:hidden;
+  }
+  .chat-head{
+    background:var(--wa-teal); color:#fff;
+    padding:16px 20px; display:flex; align-items:center; gap:12px;
+  }
+  .chat-head .avatar{
+    width:38px; height:38px; border-radius:50%;
+    background:linear-gradient(135deg, var(--amber), var(--coral));
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-family:'Sora',sans-serif; font-size:0.95rem;
+  }
+  .chat-head strong{display:block; font-size:0.94rem;}
+  .chat-head span{display:block; font-size:0.76rem; opacity:0.8;}
+  .chat-body{
+    background:#DCF3E3;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(255,255,255,0.4) 0, transparent 40%);
+    padding:20px; display:flex; flex-direction:column; gap:10px; min-height:280px;
+  }
+  .bubble{
+    max-width:82%;
+    padding:10px 14px;
+    border-radius:14px;
+    font-size:0.88rem;
+    line-height:1.4;
+    box-shadow:0 1px 1px rgba(0,0,0,0.06);
+  }
+  .bubble.in{
+    background:#fff; align-self:flex-start; border-bottom-left-radius:4px;
+  }
+  .bubble.out{
+    background:#D9FDD3; align-self:flex-end; border-bottom-right-radius:4px;
+  }
+  .bubble .time{display:block; font-size:0.66rem; color:var(--muted); margin-top:4px; text-align:right;}
+  .chat-input{
+    background:#fff; padding:12px 16px; display:flex; align-items:center; gap:10px;
+    border-top:1px solid var(--line);
+  }
+  .chat-input .field{
+    flex:1; background:var(--paper); border-radius:100px; padding:9px 14px;
+    font-size:0.82rem; color:var(--muted);
+  }
+  .chat-input .send{
+    width:36px; height:36px; border-radius:50%; background:var(--wa-green);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .chat-input .send svg{width:16px; height:16px; fill:#fff;}
+
+  /* ===== Servicios ===== */
+  .services{padding:76px 0; position:relative;}
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-bottom:40px; gap:20px; flex-wrap:wrap;
+  }
+  .kicker{
+    display:inline-block; font-size:0.82rem; font-weight:700; color:var(--wa-green-dark);
+    margin-bottom:10px;
+  }
+  .section-head h2{
+    font-size:2rem; font-weight:800; letter-spacing:-0.02em; margin:0;
+  }
+  .section-head p{margin:8px 0 0; color:var(--muted); max-width:40ch;}
+
+  .card-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+  @media (max-width:900px){ .card-grid{grid-template-columns:1fr;} }
+
+  .service-card{
+    background:var(--panel);
+    border-radius:var(--r-md);
+    padding:28px 26px;
+    border:1px solid var(--line);
+    display:flex; flex-direction:column; gap:14px;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .service-card:hover{transform:translateY(-4px); box-shadow:0 18px 40px rgba(11,20,26,0.1);}
+  .service-icon{
+    width:50px; height:50px; border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.4rem;
+  }
+  .icon-1{background:linear-gradient(135deg, #25D366, #128C7E);}
+  .icon-2{background:linear-gradient(135deg, #3AB0FF, #2E7BE0);}
+  .icon-3{background:linear-gradient(135deg, #FFB020, #FF6B5B);}
+  .service-card h3{margin:0; font-size:1.15rem; font-weight:700; letter-spacing:-0.01em;}
+  .service-card > p{margin:0; color:var(--muted); font-size:0.92rem;}
+  .service-card ul{margin:2px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:7px;}
+  .service-card ul li{
+    font-size:0.87rem; color:var(--ink); display:flex; gap:8px; align-items:flex-start;
+  }
+  .service-card ul li::before{
+    content:"✓"; color:var(--wa-green-dark); font-weight:700; flex-shrink:0;
+  }
+
+  /* ===== Como trabajo ===== */
+  .how{padding:70px 0; background:var(--ink); color:#fff; position:relative; overflow:hidden;}
+  .how .blob{opacity:0.18;}
+  .how .kicker{color:var(--wa-green);}
+  .how .section-head h2{color:#fff;}
+  .how .section-head p{color:rgba(255,255,255,0.62);}
+  .how-list{display:grid; grid-template-columns:repeat(4,1fr); gap:18px; position:relative; z-index:1;}
+  @media (max-width:900px){ .how-list{grid-template-columns:1fr;} }
+  .how-step{
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:var(--r-md);
+    padding:22px 20px;
+  }
+  .how-step .n{
+    display:inline-flex; width:32px; height:32px; border-radius:50%;
+    background:var(--wa-green); color:#fff; font-weight:700; font-family:'Sora',sans-serif;
+    align-items:center; justify-content:center; font-size:0.85rem; margin-bottom:14px;
+  }
+  .how-step h4{margin:0 0 8px; font-size:1rem; font-weight:700;}
+  .how-step p{margin:0; font-size:0.86rem; color:rgba(255,255,255,0.62);}
+
+  /* ===== Cobertura ===== */
+  .coverage{padding:76px 0;}
+  .cov-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:44px; align-items:center;}
+  @media (max-width:860px){ .cov-grid{grid-template-columns:1fr;} }
+  .cov-grid h2{font-size:2rem; font-weight:800; letter-spacing:-0.02em; margin:0 0 16px;}
+  .cov-grid > div:first-child > p{color:var(--muted); max-width:44ch; margin:0 0 22px;}
+  .mode-pill{
+    display:flex; gap:16px; padding:18px 20px; border-radius:var(--r-md);
+    background:var(--panel); border:1px solid var(--line); margin-bottom:14px;
+  }
+  .mode-pill .tag{
+    width:42px; height:42px; border-radius:12px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+  }
+  .mode-pill strong{display:block; margin-bottom:3px; font-size:1rem;}
+  .mode-pill span{font-size:0.87rem; color:var(--muted);}
+
+  .map-card{
+    border-radius:var(--r-lg);
+    padding:30px 28px;
+    background:linear-gradient(155deg, var(--wa-teal), var(--wa-green-dark));
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+  }
+  .map-card::after{
+    content:"";
+    position:absolute; width:220px; height:220px; border-radius:50%;
+    background:rgba(255,255,255,0.08); top:-80px; right:-80px;
+  }
+  .map-card .kicker2{
+    font-size:0.78rem; font-weight:700; letter-spacing:0.02em; color:rgba(255,255,255,0.75);
+    margin-bottom:10px; display:block;
+  }
+  .map-card h3{margin:0 0 10px; font-size:1.5rem; font-weight:800;}
+  .map-card p{margin:0; font-size:0.92rem; color:rgba(255,255,255,0.82); position:relative; z-index:1;}
+
+  /* ===== Contacto ===== */
+  .contact{padding:76px 0;}
+  .contact-panel{
+    background:linear-gradient(135deg, #25D366 0%, #128C7E 60%, #075E54 100%);
+    border-radius:var(--r-lg);
+    padding:48px;
+    color:#fff;
+    display:grid; grid-template-columns:1.1fr 1fr; gap:40px; align-items:center;
+    position:relative; overflow:hidden;
+  }
+  @media (max-width:860px){ .contact-panel{grid-template-columns:1fr; padding:34px 26px;} }
+  .contact-panel::before{
+    content:""; position:absolute; width:340px; height:340px; border-radius:50%;
+    background:rgba(255,255,255,0.08); bottom:-180px; left:-100px;
+  }
+  .contact-panel h2{font-size:2rem; font-weight:800; letter-spacing:-0.02em; margin:0 0 14px; position:relative; z-index:1;}
+  .contact-panel > div:first-child > p{margin:0 0 26px; color:rgba(255,255,255,0.85); max-width:38ch; position:relative; z-index:1;}
+
+  .contact-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; position:relative; z-index:1;}
+  .contact-list li{
+    background:rgba(255,255,255,0.14);
+    border-radius:var(--r-sm);
+    padding:14px 16px;
+    display:flex; align-items:center; gap:14px;
+  }
+  .contact-list .ic{
+    width:38px; height:38px; border-radius:10px; background:rgba(255,255,255,0.2);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1.1rem;
+  }
+  .contact-list a{text-decoration:none; font-weight:700; font-size:0.98rem; color:#fff;}
+  .contact-list .meta{display:block; font-size:0.78rem; color:rgba(255,255,255,0.75); font-weight:400;}
+
+  .contact-card{
+    background:#fff; border-radius:var(--r-md); padding:24px;
+    color:var(--ink); position:relative; z-index:1;
+  }
+  .contact-card .badge{
+    display:inline-block; background:rgba(37,211,102,0.15); color:var(--wa-green-dark);
+    font-size:0.76rem; font-weight:700; padding:5px 12px; border-radius:100px; margin-bottom:12px;
+  }
+  .contact-card p{margin:0 0 18px; font-size:0.9rem; color:var(--muted);}
+  .contact-card .btn-primary{width:100%; justify-content:center;}
+
+  footer{
+    padding:28px 0 32px;
+    font-size:0.82rem; color:var(--muted);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  /* floating WhatsApp button */
+  .float-wa{
+    position:fixed; bottom:22px; right:22px; z-index:60;
+    width:58px; height:58px; border-radius:50%;
+    background:var(--wa-green); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 26px rgba(37,211,102,0.45);
+    text-decoration:none;
+    transition:transform .15s ease;
+  }
+  .float-wa:hover{transform:scale(1.07);}
+  .float-wa svg{width:28px; height:28px; fill:#fff;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .btn:hover, .service-card:hover, .float-wa:hover{transform:none;}
+    .eyebrow .pulse{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark">JA</span>
+      José Alberto
+    </a>
+    <nav>
+      <a href="#servicios">Servicios</a>
+      <a href="#cobertura">Cobertura</a>
+      <a href="#contacto">Contacto</a>
+      <a class="nav-cta" href="https://wa.me/59898289007" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.07L2 22l5.05-1.32A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.18-1.77 1.24-.45.06-1.02.09-1.65-.1-.38-.12-.87-.28-1.5-.55-2.64-1.14-4.36-3.8-4.5-3.98-.13-.18-1.08-1.44-1.08-2.74s.68-1.94.92-2.2c.24-.26.52-.33.7-.33h.5c.16 0 .38-.03.58.44.22.53.75 1.83.82 1.96.07.13.11.29.02.47-.09.18-.14.29-.27.45-.13.15-.28.34-.4.46-.13.13-.27.28-.12.55.16.27.7 1.16 1.51 1.88 1.04.93 1.91 1.22 2.18 1.36.27.13.43.11.58-.07.16-.18.68-.79.86-1.06.18-.27.36-.22.6-.13.25.09 1.58.75 1.85.88.27.13.45.2.51.31.07.11.07.63-.15 1.25z"/></svg>
+        WhatsApp
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow"><span class="pulse"></span> Respondo por WhatsApp, hoy mismo</div>
+        <h1>Tu compu, resuelta por chat.</h1>
+        <p class="hero-sub">Soporte técnico informático en Montevideo. Contame qué le pasa a tu equipo por WhatsApp y coordinamos si lo resolvemos remoto o con una visita a domicilio.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://wa.me/59898289007" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.07L2 22l5.05-1.32A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.18-1.77 1.24-.45.06-1.02.09-1.65-.1-.38-.12-.87-.28-1.5-.55-2.64-1.14-4.36-3.8-4.5-3.98-.13-.18-1.08-1.44-1.08-2.74s.68-1.94.92-2.2c.24-.26.52-.33.7-.33h.5c.16 0 .38-.03.58.44.22.53.75 1.83.82 1.96.07.13.11.29.02.47-.09.18-.14.29-.27.45-.13.15-.28.34-.4.46-.13.13-.27.28-.12.55.16.27.7 1.16 1.51 1.88 1.04.93 1.91 1.22 2.18 1.36.27.13.43.11.58-.07.16-.18.68-.79.86-1.06.18-.27.36-.22.6-.13.25.09 1.58.75 1.85.88.27.13.45.2.51.31.07.11.07.63-.15 1.25z"/></svg>
+            Escribir por WhatsApp
+          </a>
+          <a class="btn btn-secondary" href="#servicios">Ver servicios</a>
+        </div>
+        <div class="trust-row">
+          <div><span class="ico ico-green">✓</span> Diagnóstico sin cargo</div>
+          <div><span class="ico ico-amber">⚡</span> Respuesta el mismo día</div>
+          <div><span class="ico ico-sky">📍</span> Montevideo</div>
+        </div>
+      </div>
+
+      <div class="chat-card">
+        <div class="chat-head">
+          <div class="avatar">JA</div>
+          <div>
+            <strong>José Alberto</strong>
+            <span>Soporte técnico · en línea</span>
+          </div>
+        </div>
+        <div class="chat-body">
+          <div class="bubble in">Hola! Mi compu está lentísima y no sé qué le pasa 😩<span class="time">10:14</span></div>
+          <div class="bubble out">Hola! Contame qué modelo es y hace cuánto lo notás así. Puede ser mantenimiento o algún driver.<span class="time">10:15</span></div>
+          <div class="bubble in">Es una notebook, hace como un mes. También se escucha rara al prender.<span class="time">10:16</span></div>
+          <div class="bubble out">Con ese ruido mejor la veo de forma presencial. Te paso horarios disponibles esta semana 👍<span class="time">10:17</span></div>
+        </div>
+        <div class="chat-input">
+          <span class="field">Escribí tu mensaje...</span>
+          <span class="send"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section class="services" id="servicios">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="kicker">QUÉ HAGO</span>
+          <h2>Servicios</h2>
+        </div>
+        <p>Tres frentes de trabajo, pensados para que tu equipo no te frene.</p>
+      </div>
+      <div class="card-grid">
+
+        <article class="service-card">
+          <div class="service-icon icon-1">🛠️</div>
+          <h3>Mantenimiento preventivo</h3>
+          <p>Limpieza física y lógica para que la máquina rinda como el primer día y no llegue a fallar.</p>
+          <ul>
+            <li>Limpieza interna y ventilación</li>
+            <li>Revisión de temperatura y ruidos</li>
+            <li>Chequeo de disco y arranque</li>
+            <li>Eliminación de archivos innecesarios</li>
+          </ul>
+        </article>
+
+        <article class="service-card">
+          <div class="service-icon icon-2">💽</div>
+          <h3>Instalación de sistemas operativos</h3>
+          <p>Windows lento, roto o desde cero: instalación limpia y configuración según tu uso.</p>
+          <ul>
+            <li>Formateo e instalación limpia</li>
+            <li>Configuración inicial y usuarios</li>
+            <li>Recuperación de archivos previa</li>
+            <li>Actualizaciones del sistema</li>
+          </ul>
+        </article>
+
+        <article class="service-card">
+          <div class="service-icon icon-3">🔌</div>
+          <h3>Drivers y controladores</h3>
+          <p>Cuando el sonido, el video o una impresora dejan de responder, suele ser un driver.</p>
+          <ul>
+            <li>Instalación de controladores faltantes</li>
+            <li>Actualización de drivers de video/audio</li>
+            <li>Puesta a punto de periféricos</li>
+            <li>Corrección de conflictos de hardware</li>
+          </ul>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO TRABAJO -->
+  <section class="how">
+    <div class="blob" style="width:360px;height:360px;background:var(--wa-green);top:-140px;left:-100px;"></div>
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="kicker">EL PROCESO</span>
+          <h2>Cómo trabajo</h2>
+        </div>
+        <p>De la consulta al equipo funcionando, sin vueltas.</p>
+      </div>
+      <div class="how-list">
+        <div class="how-step">
+          <span class="n">1</span>
+          <h4>Me escribís</h4>
+          <p>Contás qué le pasa al equipo por WhatsApp o mail.</p>
+        </div>
+        <div class="how-step">
+          <span class="n">2</span>
+          <h4>Diagnóstico</h4>
+          <p>Reviso el problema, remoto o coordinando una visita.</p>
+        </div>
+        <div class="how-step">
+          <span class="n">3</span>
+          <h4>Presupuesto</h4>
+          <p>Te confirmo qué hace falta antes de tocar nada.</p>
+        </div>
+        <div class="how-step">
+          <span class="n">4</span>
+          <h4>Solución</h4>
+          <p>Hago el trabajo y te dejo el equipo probado y andando.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COBERTURA -->
+  <section class="coverage" id="cobertura">
+    <div class="wrap cov-grid">
+      <div>
+        <span class="kicker">MODALIDADES</span>
+        <h2>Remoto o presencial, vos elegís</h2>
+        <p>No todos los problemas necesitan que vaya hasta tu casa. Te ayudo a elegir la modalidad según lo que le pase al equipo.</p>
+
+        <div class="mode-pill">
+          <span class="tag" style="background:rgba(58,176,255,0.15); color:#1B7FC4;">💻</span>
+          <div>
+            <strong>Remoto</strong>
+            <span>Para instalación de programas, drivers, configuración y limpieza lógica. Rápido y sin moverte de tu casa.</span>
+          </div>
+        </div>
+        <div class="mode-pill">
+          <span class="tag" style="background:rgba(255,107,91,0.15); color:#D94B39;">🏠</span>
+          <div>
+            <strong>Presencial</strong>
+            <span>Para mantenimiento físico, formateo, hardware o cuando el equipo directamente no enciende.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-card">
+        <span class="kicker2">ZONA DE COBERTURA</span>
+        <h3>Montevideo</h3>
+        <p>Servicio presencial en Montevideo y alrededores. Fuera de la zona o del país, consultá disponibilidad remota — funciona en cualquier parte con internet.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="contact" id="contacto">
+    <div class="wrap">
+      <div class="contact-panel">
+        <div>
+          <h2>Hablemos por WhatsApp</h2>
+          <p>Es la forma más rápida de contarme qué le pasa a tu equipo y coordinar el diagnóstico.</p>
+
+          <ul class="contact-list">
+            <li>
+              <span class="ic">📱</span>
+              <a href="https://wa.me/59898289007" target="_blank" rel="noopener">098 289 007
+                <span class="meta">WhatsApp</span>
+              </a>
+            </li>
+            <li>
+              <span class="ic">✉️</span>
+              <a href="mailto:jalbertoramosaliaga@gmail.com">jalbertoramosaliaga@gmail.com
+                <span class="meta">Correo electrónico</span>
+              </a>
+            </li>
+            <li>
+              <span class="ic">📍</span>
+              <a href="#cobertura">Montevideo
+                <span class="meta">Zona de cobertura</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="contact-card">
+          <span class="badge">DIAGNÓSTICO SIN CARGO</span>
+          <p>Contame el problema por WhatsApp y te digo qué hace falta antes de cobrarte nada.</p>
+          <a class="btn btn-primary" href="https://wa.me/59898289007" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.07L2 22l5.05-1.32A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.18-1.77 1.24-.45.06-1.02.09-1.65-.1-.38-.12-.87-.28-1.5-.55-2.64-1.14-4.36-3.8-4.5-3.98-.13-.18-1.08-1.44-1.08-2.74s.68-1.94.92-2.2c.24-.26.52-.33.7-.33h.5c.16 0 .38-.03.58.44.22.53.75 1.83.82 1.96.07.13.11.29.02.47-.09.18-.14.29-.27.45-.13.15-.28.34-.4.46-.13.13-.27.28-.12.55.16.27.7 1.16 1.51 1.88 1.04.93 1.91 1.22 2.18 1.36.27.13.43.11.58-.07.16-.18.68-.79.86-1.06.18-.27.36-.22.6-.13.25.09 1.58.75 1.85.88.27.13.45.2.51.31.07.11.07.63-.15 1.25z"/></svg>
+            Iniciar chat
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <footer>
+      <span>© 2026 José Alberto — Soporte Técnico</span>
+      <span>Montevideo, Uruguay</span>
+    </footer>
+  </div>
+
+</main>
+
+<a class="float-wa" href="https://wa.me/59898289007" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.35 5.07L2 22l5.05-1.32A9.94 9.94 0 0 0 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm5.2 14.2c-.22.62-1.28 1.18-1.77 1.24-.45.06-1.02.09-1.65-.1-.38-.12-.87-.28-1.5-.55-2.64-1.14-4.36-3.8-4.5-3.98-.13-.18-1.08-1.44-1.08-2.74s.68-1.94.92-2.2c.24-.26.52-.33.7-.33h.5c.16 0 .38-.03.58.44.22.53.75 1.83.82 1.96.07.13.11.29.02.47-.09.18-.14.29-.27.45-.13.15-.28.34-.4.46-.13.13-.27.28-.12.55.16.27.7 1.16 1.51 1.88 1.04.93 1.91 1.22 2.18 1.36.27.13.43.11.58-.07.16-.18.68-.79.86-1.06.18-.27.36-.22.6-.13.25.09 1.58.75 1.85.88.27.13.45.2.51.31.07.11.07.63-.15 1.25z"/></svg>
+</a>
+
+</body>
+</html>
