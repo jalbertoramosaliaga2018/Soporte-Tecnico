@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>Calculadora de Remesas</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #0f172a;
+    color: #e2e8f0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-size: 16px;
+  }
+  .wrap { max-width: 540px; margin: 0 auto; padding: 16px 14px 48px; }
+
+  header { text-align: center; margin-bottom: 18px; }
+  header h1 { margin: 0; font-size: 1.3rem; color: #7dd3fc; }
+  header p { margin: 4px 0 0; color: #94a3b8; font-size: .85rem; }
+
+  .card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+  .card h2 {
+    margin: 0 0 12px;
+    font-size: .95rem;
+    color: #7dd3fc;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+
+  .campo { margin-bottom: 12px; }
+  .campo label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .85rem;
+    color: #cbd5e1;
+    margin-bottom: 5px;
+  }
+  .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 4px;
+    border-radius: 6px;
+    background: #334155;
+    color: #7dd3fc;
+    font-size: .75rem;
+    font-weight: 700;
+  }
+  .formula { color: #64748b; font-size: .78rem; margin-left: auto; }
+
+  input[type="number"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.05rem;
+    color: #f1f5f9;
+    background: #0f172a;
+    border: 1px solid #475569;
+    border-radius: 10px;
+    outline: none;
+  }
+  input[type="number"]:focus { border-color: #38bdf8; }
+
+  .res-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 8px;
+    border-bottom: 1px solid #334155;
+  }
+  .res-row:last-child { border-bottom: none; }
+  .res-row .label { font-size: .88rem; color: #cbd5e1; }
+  .res-row .formula { margin-left: 2px; }
+  .res-row .valor {
+    margin-left: auto;
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .destacada { background: #172554; border-radius: 8px; }
+  .pos { color: #4ade80; }
+  .neg { color: #f87171; }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #04283c;
+    background: #38bdf8;
+  }
+  .btn-primary:active { background: #0ea5e9; }
+  .btn-danger {
+    display: none;
+    padding: 10px 14px;
+    font-size: .85rem;
+    color: #f87171;
+    background: transparent;
+    border: 1px solid #7f1d1d;
+  }
+  .nota { margin: 8px 0 0; font-size: .75rem; color: #64748b; text-align: center; }
+
+  #toast {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%) translateY(20px);
+    max-width: 90%;
+    padding: 10px 18px;
+    font-size: .9rem;
+    color: #04283c;
+    background: #4ade80;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s, transform .25s;
+    z-index: 10;
+  }
+  #toast.error { background: #f87171; color: #450a0a; }
+  #toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .tabla-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  th, td { padding: 8px 6px; text-align: right; white-space: nowrap; }
+  th { color: #94a3b8; font-weight: 600; border-bottom: 1px solid #475569; font-size: .78rem; }
+  td { border-bottom: 1px solid #334155; font-variant-numeric: tabular-nums; }
+  th:first-child, td:first-child { text-align: left; }
+  .mini {
+    padding: 5px 10px;
+    font-size: .75rem;
+    font-weight: 600;
+    color: #0f172a;
+    background: #38bdf8;
+    margin-right: 4px;
+  }
+  .mini.del { background: #334155; color: #f87171; padding: 5px 8px; }
+  #historialVacio { display: none; color: #64748b; font-size: .85rem; text-align: center; padding: 10px 0; }
+  footer { text-align: center; color: #475569; font-size: .72rem; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Calculadora de Remesas</h1>
+    <p>UYU &rarr; USDT (Binance) &rarr; MN (Cuba)</p>
+  </header>
+
+  <!-- ===== Entradas ===== -->
+  <section class="card">
+    <h2>Datos de la operación</h2>
+
+    <div class="campo">
+      <label for="inCantidad"><span class="num">1</span> Cantidad (UYU)</label>
+      <input type="number" id="inCantidad" inputmode="decimal" step="any" placeholder="0,00">
+    </div>
+
+    <div class="campo">
+      <label for="inPrecioMn"><span class="num">2</span> Precio / MN / Cuba <span class="formula">tasa remesa</span></label>
+      <input type="number" id="inPrecioMn" inputmode="decimal" step="any" placeholder="0,00">
+    </div>
+
+    <div class="campo">
+      <label for="inUsdtBinance"><span class="num">4</span> Precio USDT Binance</label>
+      <input type="number" id="inUsdtBinance" inputmode="decimal" step="any" placeholder="0,00">
+    </div>
+
+    <div class="campo">
+      <label for="inUsdtCuba"><span class="num">6</span> Precio USDT en Cuba</label>
+      <input type="number" id="inUsdtCuba" inputmode="decimal" step="any" placeholder="0,00">
+    </div>
+  </section>
+
+  <!-- ===== Resultados ===== -->
+  <section class="card">
+    <h2>Resultados</h2>
+
+    <div class="res-row">
+      <span class="num">3</span><span class="label">Remesa</span><span class="formula">= 1 &times; 2</span>
+      <span class="valor" id="outRemesa">&mdash;</span>
+    </div>
+    <div class="res-row destacada">
+      <span class="num">5</span><span class="label">Cantidad USDT</span><span class="formula">= 1 &divide; 4</span>
+      <span class="valor" id="outCantUsdt">&mdash;</span>
+    </div>
+    <div class="res-row">
+      <span class="num">7</span><span class="label">Total</span><span class="formula">= 5 &times; 6</span>
+      <span class="valor" id="outTotal">&mdash;</span>
+    </div>
+    <div class="res-row">
+      <span class="num">8</span><span class="label">Ganancia</span><span class="formula">= 7 &minus; 3</span>
+      <span class="valor" id="outGanancia">&mdash;</span>
+    </div>
+    <div class="res-row">
+      <span class="num">9</span><span class="label">% Ganancia del total</span><span class="formula">= 8 &divide; 7</span>
+      <span class="valor" id="outPorcentaje">&mdash;</span>
+    </div>
+
+    <p style="margin:12px 0 0;">
+      <button class="btn-primary" id="btnGuardar">Guardar precios USDT (columnas 4 y 6)</button>
+    </p>
+    <p class="nota">Se guarda únicamente el Precio USDT Binance (col. 4) y el Precio USDT en Cuba (col. 6), con fecha.</p>
+  </section>
+
+  <!-- ===== Historial ===== -->
+  <section class="card">
+    <h2>Precios USDT guardados</h2>
+    <div class="tabla-scroll">
+      <table>
+        <thead>
+          <tr><th>Fecha</th><th>Prec. Binance (4)</th><th>Prec. Cuba (6)</th><th></th></tr>
+        </thead>
+        <tbody id="tbodyHistorial"></tbody>
+      </table>
+      <p id="historialVacio">Todavía no hay precios guardados.</p>
+    </div>
+    <p style="margin:12px 0 0; text-align:right;">
+      <button class="btn-danger" id="btnBorrarTodo">Borrar todo</button>
+    </p>
+  </section>
+
+  <footer>Prototipo HTML para pruebas &middot; los datos se guardan en este navegador (localStorage)</footer>
+</div>
+
+<div id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'calreme_precios_usdt_v2';
+  var $ = function (id) { return document.getElementById(id); };
+  var fmt2 = new Intl.NumberFormat('es-UY', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  // Entradas (columnas que el usuario completa)
+  var inCantidad    = $('inCantidad');     // col 1
+  var inPrecioMn    = $('inPrecioMn');     // col 2
+  var inUsdtBinance = $('inUsdtBinance');  // col 4
+  var inUsdtCuba    = $('inUsdtCuba');     // col 6
+
+  // Salidas (columnas calculadas)
+  var out = {
+    remesa:     $('outRemesa'),      // col 3
+    cantUsdt:   $('outCantUsdt'),    // col 5
+    total:      $('outTotal'),       // col 7
+    ganancia:   $('outGanancia'),    // col 8
+    porcentaje: $('outPorcentaje')   // col 9
+  };
+
+  function num(el) {
+    var v = parseFloat(String(el.value).replace(',', '.'));
+    return isNaN(v) ? 0 : v;
+  }
+  function show(v) { return isFinite(v) ? fmt2.format(v) : '\u2014'; }
+
+  // ===== Cálculo de las 9 columnas =====
+  function calcular() {
+    var v1 = num(inCantidad);      // 1. Cantidad UYU
+    var v2 = num(inPrecioMn);      // 2. Precio/MN/Cuba
+    var v4 = num(inUsdtBinance);   // 4. Precio USDT Binance
+    var v6 = num(inUsdtCuba);      // 6. Precio USDT en Cuba
+
+    var v3 = v1 * v2;                        // 3. Remesa = 1 * 2
+    var v5 = v4 > 0 ? v1 / v4 : NaN;         // 5. Cantidad USDT = 1 / 4
+    var v7 = isFinite(v5) ? v5 * v6 : NaN;   // 7. Total = 5 * 6
+    var v8 = isFinite(v7) ? v7 - v3 : NaN;   // 8. Ganancia = 7 - 3
+    var v9 = (isFinite(v7) && v7 !== 0) ? (v8 / v7) * 100 : NaN; // 9. % ganancia del total
+
+    out.remesa.textContent     = show(v3);
+    out.cantUsdt.textContent   = show(v5) + (isFinite(v5) ? ' USDT' : '');
+    out.total.textContent      = show(v7);
+    out.ganancia.textContent   = show(v8);
+    out.porcentaje.textContent = isFinite(v9) ? fmt2.format(v9) + ' %' : '\u2014';
+
+    marcar(out.ganancia, v8);
+    marcar(out.porcentaje, v9);
+
+    return { v1: v1, v2: v2, v3: v3, v4: v4, v5: v5, v6: v6, v7: v7, v8: v8, v9: v9 };
+  }
+
+  function marcar(el, v) {
+    el.classList.toggle('pos', isFinite(v) && v >= 0);
+    el.classList.toggle('neg', isFinite(v) && v < 0);
+  }
+
+  // ===== Guardado de columnas 4 y 6 =====
+  function cargarLista() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || []; }
+    catch (e) { return []; }
+  }
+  function guardarLista(arr) { localStorage.setItem(KEY, JSON.stringify(arr)); }
+
+  function fmtFecha(iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    var p = function (n) { return (n < 10 ? '0' : '') + n; };
+    return p(d.getDate()) + '/' + p(d.getMonth() + 1) + '/' + String(d.getFullYear()).slice(2) +
+           ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+  }
+
+  function pintarHistorial() {
+    var lista = cargarLista();
+    var tb = $('tbodyHistorial');
+    tb.innerHTML = '';
+    $('btnBorrarTodo').style.display = lista.length ? 'inline-block' : 'none';
+    $('historialVacio').style.display = lista.length ? 'none' : 'block';
+
+    lista.forEach(function (r, i) {
+      var tr = document.createElement('tr');
+
+      var tdF = document.createElement('td');
+      tdF.textContent = fmtFecha(r.fecha);
+
+      var tdP = document.createElement('td');
+      tdP.textContent = fmt2.format(r.precioBinance);
+
+      var tdC = document.createElement('td');
+      tdC.textContent = fmt2.format(r.precioCuba);
+
+      var tdA = document.createElement('td');
+
+      var bUsar = document.createElement('button');
+      bUsar.textContent = 'Usar';
+      bUsar.className = 'mini';
+      bUsar.addEventListener('click', function () {
+        inUsdtBinance.value = r.precioBinance;
+        inUsdtCuba.value = r.precioCuba;
+        calcular();
+        avisar('Precios cargados en las columnas 4 y 6');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      var bDel = document.createElement('button');
+      bDel.textContent = '\u2715';
+      bDel.className = 'mini del';
+      bDel.addEventListener('click', function () {
+        var l = cargarLista();
+        l.splice(i, 1);
+        guardarLista(l);
+        pintarHistorial();
+      });
+
+      tdA.appendChild(bUsar);
+      tdA.appendChild(bDel);
+      tr.appendChild(tdF);
+      tr.appendChild(tdP);
+      tr.appendChild(tdC);
+      tr.appendChild(tdA);
+      tb.appendChild(tr);
+    });
+  }
+
+  // ===== Eventos =====
+  [inCantidad, inPrecioMn, inUsdtBinance, inUsdtCuba].forEach(function (el) {
+    el.addEventListener('input', calcular);
+  });
+
+  $('btnGuardar').addEventListener('click', function () {
+    var r = calcular();
+    if (!(r.v4 > 0) || !(r.v6 > 0)) {
+      avisar('Completa el Precio USDT Binance (col. 4) y el Precio USDT en Cuba (col. 6) antes de guardar.', true);
+      return;
+    }
+    var lista = cargarLista();
+    lista.unshift({
+      fecha: new Date().toISOString(),
+      precioBinance: r.v4,  // columna 4
+      precioCuba: r.v6      // columna 6
+    });
+    guardarLista(lista);
+    pintarHistorial();
+    avisar('Precios USDT guardados \u2713');
+  });
+
+  $('btnBorrarTodo').addEventListener('click', function () {
+    if (!confirm('\u00BFBorrar todos los precios guardados?')) return;
+    guardarLista([]);
+    pintarHistorial();
+  });
+
+  // ===== Toast =====
+  var toastTimer = null;
+  function avisar(msg, esError) {
+    var t = $('toast');
+    t.textContent = msg;
+    t.classList.toggle('error', !!esError);
+    t.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove('visible'); }, 2200);
+  }
+
+  // Init
+  calcular();
+  pintarHistorial();
+})();
+</script>
+</body>
+</html>
